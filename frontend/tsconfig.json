@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./src",
     "paths": {
-      "@shared/*": ["../../../shared/*"], // If using shared types from outside frontend
+      "@shared/*": ["../../shared/*"],
       "@/*": ["./*"] // Alias for src/
     }
   },

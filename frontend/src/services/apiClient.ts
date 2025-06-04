@@ -1,4 +1,5 @@
 // frontend/src/services/apiClient.ts
+/// <reference types="vite/client" />
 import axios from 'axios';
 
 const apiClient = axios.create({
