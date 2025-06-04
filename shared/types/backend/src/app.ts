@@ -4,17 +4,17 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import crmRoutesV1 from './api/v1/crm.routes';
 // import authRoutesV1 from './api/v1/auth.routes'; // etc.
+import mongoose from 'mongoose';
 
 dotenv.config();
 
 const app: Express = express();
 
-// --- Database Connection (Example with Mongoose) ---
-// import mongoose from 'mongoose';
-// const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/holistic_crm';
-// mongoose.connect(MONGO_URI)
-//   .then(() => console.log('MongoDB connected successfully.'))
-//   .catch(err => console.error('MongoDB connection error:', err));
+// --- Database Connection ---
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/holistic_crm';
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('MongoDB connected successfully.'))
+  .catch(err => console.error('MongoDB connection error:', err));
 // --- End Database Connection ---
 
 
