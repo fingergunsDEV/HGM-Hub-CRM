@@ -1,0 +1,58 @@
+# .github/workflows/deploy-frontend.yml
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Or your default branch
+    paths: # Only run if frontend code changes
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml' # Or if the workflow itself changes
+  workflow_dispatch: # Allows manual triggering
+
+permissions:
+  contents: read
+  pages: write # Required to deploy to GitHub Pages
+  id-token: write # Required for OIDC (OpenID Connect) token if using advanced deployment
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend # Set working directory for all run steps
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Or your desired Node version
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json # Path to your frontend lock file
+
+      - name: Install dependencies
+        run: npm ci # Use ci for cleaner installs in CI
+
+      - name: Build frontend
+        run: npm run build
+        env:
+          GITHUB_PAGES: true # This sets the env var for vite.config.ts
+          # You might need to set VITE_API_BASE_URL here if your live app needs
+          # to point to a deployed backend eventually. For now, it's less critical
+          # if the GitHub Pages version is just a demo and still expects a local backend.
+          # VITE_API_BASE_URL: https://your-deployed-backend.com/api/v1
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./frontend/dist # Path to your frontend build output
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
