@@ -1,13 +1,19 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+// frontend/vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@shared': path.resolve(__dirname, '../shared'),
-    },
-  },
-});
+// https://vitejs.dev/config/
+export default defineConfig(({ command }) => {
+  const config = {
+    plugins: [react()],
+    base: '/', // Default for root deployment
+  }
+
+  // For GitHub Pages, set the base to your repository name
+  // Change '/holistic-content-hub-crm/' to your actual repository name
+  if (command === 'build' && process.env.GITHUB_PAGES) {
+    config.base = '/HGM-Hub-CRM/'
+  }
+
+  return config
+})
